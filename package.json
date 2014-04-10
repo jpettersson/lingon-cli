@@ -1,0 +1,54 @@
+{
+  "name": "lingon-cli",
+  "description": "Command line interface to Lingon, a static site generator.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jpettersson/lingon-cli",
+  "author": {
+    "name": "Jonathan Pettersson",
+    "email": "jonathan@spacetofu.com",
+    "url": "http://jpettersson.com"
+  },
+  "contributors": [
+    {
+      "name": "Philip von Bargen",
+      "email": "philip@philipvonbargen.de",
+      "url": "http://philipvonbargen.de"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jpettersson/lingon-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jpettersson/lingon-cli/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jpettersson/lingon/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.9"
+  },
+  "bin": {
+    "lingonx": "bin/lingonx"
+  },
+  "dependencies": {
+    "chalk": "*",
+    "liftoff": "~0.9.5"
+  },
+  "preferGlobal": true,
+  "devDependencies": {
+  },
+  "keywords": [
+    "middleman",
+    "sprockets",
+    "build",
+    "javascript",
+    "static",
+    "site",
+    "generator",
+    "gulp"
+  ]
+}
