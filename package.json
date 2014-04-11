@@ -32,11 +32,12 @@
     "node": ">= 0.9"
   },
   "bin": {
-    "lingonx": "bin/lingonx"
+    "lingon": "bin/lingon"
   },
   "dependencies": {
     "chalk": "*",
-    "liftoff": "~0.9.5"
+    "liftoff": "~0.9.5",
+    "minimist": "~0.0.8"
   },
   "preferGlobal": true,
   "devDependencies": {
