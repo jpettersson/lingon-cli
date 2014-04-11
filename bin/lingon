@@ -4,11 +4,18 @@
 
 var chalk = require('chalk');
 var Liftoff = require('liftoff');
+var argv = require('minimist')(process.argv.slice(2));
 
 function log() {
   console.log.apply(null, ["[ " + chalk.red('Lingon CLI') + " ]"].concat(
     Array.prototype.slice.call(arguments, 0)
   ));
+}
+
+if(!!argv.v || argv._[0] == 'version') {
+  var pkg = require('../package.json');
+  log('Lingon CLI version:', pkg.version);
+  process.exit();
 }
 
 var cli = new Liftoff({
