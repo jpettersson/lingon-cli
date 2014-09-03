@@ -2,9 +2,11 @@
 
 'use strict';
 
-var chalk = require('chalk');
+var fs      = require('fs');
+var spawn   = require('child_process').spawn;
+var chalk   = require('chalk');
 var Liftoff = require('liftoff');
-var argv = require('minimist')(process.argv.slice(2));
+var argv    = require('minimist')(process.argv.slice(2));
 
 function log() {
   console.log.apply(null, ["[ " + chalk.red('Lingon CLI') + " ]"].concat(
@@ -41,7 +43,36 @@ cli.launch(function handleArguments(env) {
 
   // Change working directory to the one containing lingon.js
   process.chdir(env.configBase);
-  
-  // Hand off control to lingon.js
-  require(env.configPath);
+
+  // Start new lingon sub process
+  var lingonProcess;
+  var spawnLingonProcess = function spawnLingonProcess() {
+    if(lingonProcess) {
+      log('Restarting Lingon process!');
+      lingonProcess.kill();
+      lingonProcess = null;
+    }
+
+    lingonProcess = spawn(env.configPath, process.argv.slice(2), { stdio: 'inherit' });
+  };
+
+  // setting up a file watcher to reload the lingon process when the
+  // lingon.js file has been modified
+  var lingonFileWatch;
+  var setupWatcher = function setupWatcher() {
+    lingonFileWatch = fs.watch(env.configPath, function() {
+      lingonFileWatch.close();
+      spawnLingonProcess();
+
+      // wait a moment until continuing to watch for changes, that way
+      // any swap files will be resolved and multiple events per change
+      // can _hopefully_ be prevented
+      setTimeout(function() {
+        setupWatcher();
+      }, 3000);
+    });
+  };
+
+  spawnLingonProcess();
+  setupWatcher();
 });
