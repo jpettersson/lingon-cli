@@ -48,7 +48,7 @@ cli.launch(function handleArguments(env) {
   var lingonProcess;
   var spawnLingonProcess = function spawnLingonProcess() {
     if(lingonProcess) {
-      log('Restarting Lingon process!');
+      log('Configuration changed. Restarting Lingon process!');
       lingonProcess.kill();
       lingonProcess = null;
     }
