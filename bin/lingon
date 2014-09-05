@@ -49,11 +49,15 @@ cli.launch(function handleArguments(env) {
   var spawnLingonProcess = function spawnLingonProcess() {
     if(lingonProcess) {
       log('Configuration changed. Restarting Lingon process!');
+      lingonProcess.removeAllListeners('exit');
       lingonProcess.kill();
       lingonProcess = null;
     }
 
     lingonProcess = spawn(env.configPath, process.argv.slice(2), { stdio: 'inherit' });
+    lingonProcess.on('exit', function() {
+      process.exit();
+    })
   };
 
   // setting up a file watcher to reload the lingon process when the
