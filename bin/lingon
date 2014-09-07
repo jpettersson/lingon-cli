@@ -9,7 +9,7 @@ var Liftoff = require('liftoff');
 var argv    = require('minimist')(process.argv.slice(2));
 
 function log() {
-  console.log.apply(null, ["[ " + chalk.red('Lingon CLI') + " ]"].concat(
+  console.log.apply(null, ["[ " + chalk.green('Lingon CLI') + " ]"].concat(
     Array.prototype.slice.call(arguments, 0)
   ));
 }
@@ -18,6 +18,33 @@ if(!!argv.v || argv._[0] == 'version') {
   var pkg = require('../package.json');
   log('Lingon CLI version:', pkg.version);
 }
+
+
+if (argv._[0] == 'new') {
+  var projectName = argv._[1];
+  var args = ['clone','git@github.com:jpettersson/lingon-ng-template.git']
+
+  if (projectName) {
+    args.push(projectName);
+  };
+
+  log(chalk.green('Initializing a lingon starter project'));
+
+  // Clone lingon template
+  var gitClone = spawn('git', args, { stdio: 'inherit', cwd: process.cwd });
+  gitClone.on('exit', function(c) {
+    if (c !== 0) { return; }
+
+    // TODO: Replace all string occurences of project-name with specified project name argument (?)
+
+    // TODO: Run npm and bower install (?)
+
+    log(chalk.green('All done!'));
+    process.exit()
+  });
+
+  return;
+};
 
 var cli = new Liftoff({
   processTitle: 'lingon',
