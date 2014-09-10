@@ -28,7 +28,9 @@ if (argv._[0] == 'new') {
     args.push(projectName);
   };
 
-  log(chalk.green('Initializing a lingon starter project'));
+  log(chalk.green('Creating lingon project...'));
+
+  // TODO: check if project (folder) with this name already exists
 
   // Clone lingon template
   var gitClone = spawn('git', args, { stdio: 'inherit', cwd: process.cwd });
