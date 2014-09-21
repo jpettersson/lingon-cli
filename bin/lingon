@@ -7,47 +7,72 @@ var spawn   = require('child_process').spawn;
 var chalk   = require('chalk');
 var Liftoff = require('liftoff');
 var argv    = require('minimist')(process.argv.slice(2));
+var dir     = require('node-dir');
 
 function log() {
-  console.log.apply(null, ["[ " + chalk.green('Lingon CLI') + " ]"].concat(
+  console.log.apply(null, ["[ " + chalk.red('Lingon CLI') + " ]"].concat(
     Array.prototype.slice.call(arguments, 0)
   ));
 }
 
+//-------------------------------
+// LINGON VERSION
+//-------------------------------
 if(!!argv.v || argv._[0] == 'version') {
   var pkg = require('../package.json');
   log('Lingon CLI version:', pkg.version);
 }
 
-
+//-------------------------------
+// LINGON NEW
+//-------------------------------
 if (argv._[0] == 'new') {
   var projectName = argv._[1];
   var args = ['clone','git@github.com:jpettersson/lingon-ng-template.git']
 
   if (projectName) {
     args.push(projectName);
-  };
-
-  log(chalk.green('Creating lingon project...'));
+  } else {
+    log(chalk.red('Please specify a project name! E.g. \'lingon new my-project\''));
+    process.exit()
+  }
 
   // TODO: check if project (folder) with this name already exists
 
-  // Clone lingon template
-  var gitClone = spawn('git', args, { stdio: 'inherit', cwd: process.cwd });
-  gitClone.on('exit', function(c) {
-    if (c !== 0) { return; }
+  log(chalk.green('Initializing lingon project...'));
+
+  // Clone lingon-ng-template
+  var gitClone = spawn('git', args, { stdio: 'ignore', cwd: process.cwd });
+  var projectPath = process.cwd() + '/' + projectName;
+  gitClone.on('exit', function(code) {
+    if (code !== 0) { return; }
+
+    // rm git folder
+    var rmGitDir = spawn('rm', ['-rf', projectPath + '/.git'], { stdio: 'inherit', cwd: process.cwd });
+    rmGitDir.on('exit', function(code) {
+      if (code !== 0) { return; }
+      // read paths to print to stdout
+      dir.paths(projectPath, function(err, paths) {
+        if (err) throw err;
+        paths.files.forEach(function(path) {
+          log(chalk.green('- create ') + chalk.white(path.replace(process.cwd() + '/', '')));
+        })
+
+        log(chalk.green('All done!'));
+        process.exit()
+      });
+    })
 
     // TODO: Replace all string occurences of project-name with specified project name argument (?)
-
     // TODO: Run npm and bower install (?)
-
-    log(chalk.green('All done!'));
-    process.exit()
   });
 
   return;
 };
 
+//-------------------------------
+// LINGON PROCESS
+//-------------------------------
 var cli = new Liftoff({
   processTitle: 'lingon',
   moduleName: 'lingon',

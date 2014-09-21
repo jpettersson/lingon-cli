@@ -41,6 +41,7 @@
   },
   "preferGlobal": true,
   "devDependencies": {
+    "node-dir": "^0.1.6"
   },
   "keywords": [
     "middleman",
