@@ -29,21 +29,27 @@ if(!!argv.v || argv._[0] == 'version') {
 if (argv._[0] == 'new') {
   var projectName = argv._[1];
   var args = ['clone','git@github.com:jpettersson/lingon-ng-template.git']
+  var projectPath;
 
   if (projectName) {
     args.push(projectName);
+    projectPath = process.cwd() + '/' + projectName;
   } else {
     log(chalk.red('Please specify a project name! E.g. \'lingon new my-project\''));
     process.exit()
   }
 
-  // TODO: check if project (folder) with this name already exists
+  if (fs.existsSync(projectPath)) {
+    log(chalk.red('A folder with the name \'' + projectName + '\' already exists! Please choose a different name.'));
+    process.exit()
+  };
 
   log(chalk.green('Initializing lingon project...'));
 
+  // TODO: check if git is installed on system
+
   // Clone lingon-ng-template
   var gitClone = spawn('git', args, { stdio: 'ignore', cwd: process.cwd });
-  var projectPath = process.cwd() + '/' + projectName;
   gitClone.on('exit', function(code) {
     if (code !== 0) { return; }
 
@@ -55,7 +61,7 @@ if (argv._[0] == 'new') {
       dir.paths(projectPath, function(err, paths) {
         if (err) throw err;
         paths.files.forEach(function(path) {
-          log(chalk.green('- create ') + chalk.white(path.replace(process.cwd() + '/', '')));
+          log(chalk.green('  create ') + chalk.white(path.replace(process.cwd() + '/', '')));
         })
 
         log(chalk.green('All done!'));
