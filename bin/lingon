@@ -28,8 +28,20 @@ if(!!argv.v || argv._[0] == 'version') {
 //-------------------------------
 if (argv._[0] == 'new') {
   var projectName = argv._[1];
-  var args = ['clone','git@github.com:jpettersson/lingon-ng-template.git']
+  var templateRepo;
   var projectPath;
+  var templates = {
+    angular: 'git@github.com:jpettersson/lingon-ng-template.git',
+    minimal: 'git@github.com:javoire/lingon-template-minimal.git'
+  }
+
+  if (argv.t && templates.hasOwnProperty(argv.t)) {
+    templateRepo = templates[argv.t];
+  } else {
+    templateRepo = templates.minimal;
+  };
+
+  var args = ['clone', templateRepo]
 
   if (projectName) {
     args.push(projectName);
