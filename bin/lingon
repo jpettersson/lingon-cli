@@ -7,6 +7,7 @@ var spawn   = require('child_process').spawn;
 var chalk   = require('chalk');
 var Liftoff = require('liftoff');
 var argv    = require('minimist')(process.argv.slice(2));
+var dir     = require('node-dir');
 
 function log() {
   console.log.apply(null, ["[ " + chalk.red('Lingon CLI') + " ]"].concat(
@@ -14,11 +15,89 @@ function log() {
   ));
 }
 
+//-------------------------------
+// LINGON VERSION
+//-------------------------------
 if(!!argv.v || argv._[0] == 'version') {
   var pkg = require('../package.json');
   log('Lingon CLI version:', pkg.version);
 }
 
+//-------------------------------
+// LINGON NEW
+//-------------------------------
+if (argv._[0] == 'new') {
+  var projectName = argv._[1];
+  var templateRepo;
+  var projectPath;
+  var templates = {
+    angular: 'git@github.com:jpettersson/lingon-ng-template.git',
+    minimal: 'git@github.com:javoire/lingon-template-minimal.git'
+  }
+
+  if (argv.t && templates.hasOwnProperty(argv.t)) {
+    templateRepo = templates[argv.t];
+  } else {
+    templateRepo = templates.minimal;
+  };
+
+  var args = ['clone', templateRepo];
+
+  if (projectName) {
+    args.push(projectName);
+    projectPath = process.cwd() + '/' + projectName;
+  } else {
+    console.log(chalk.red('Please specify a project name! E.g. \'lingon new my-project\''));
+    process.exit()
+  }
+
+  if (fs.existsSync(projectPath)) {
+    console.log(chalk.red('A folder with the name \'' + projectName + '\' already exists! Please choose a different name.'));
+    process.exit()
+  };
+
+  log('Initializing lingon project...');
+
+  // TODO: check if git is installed on system
+
+  // Clone lingon-ng-template and install dependencies
+  var gitClone = spawn('git', args, { stdio: 'ignore', cwd: process.cwd });
+  gitClone.on('exit', function(code) {
+
+    var rmGitDir = spawn('rm', ['-rf', projectPath + '/.git'], { stdio: 'inherit', cwd: process.cwd });
+    rmGitDir.on('exit', function(code) {
+
+      // read paths to print to stdout
+      dir.paths(projectPath, function(err, paths) {
+        if (err) throw err;
+        paths.files.forEach(function(path) {
+          console.log(chalk.green('  create ') + path.replace(process.cwd() + '/', ''));
+        })
+
+        console.log(chalk.green('  run ') + 'npm install');
+        var npmInstall = spawn('npm', ['install'], { stdio: 'inherit', cwd: projectPath });
+        npmInstall.on('exit', function(code) {
+
+          console.log(chalk.green('  run ') + 'bower install');
+          var npmInstall = spawn('bower', ['install'], { stdio: 'inherit', cwd: projectPath });
+          npmInstall.on('exit', function(code) {
+
+            log(chalk.green('All done!'));
+            process.exit()
+          });
+        });
+      });
+    })
+
+    // TODO: Replace all string occurences of project-name with specified project name argument (?)
+  });
+
+  return;
+};
+
+//-------------------------------
+// LINGON PROCESS
+//-------------------------------
 var cli = new Liftoff({
   processTitle: 'lingon',
   moduleName: 'lingon',
