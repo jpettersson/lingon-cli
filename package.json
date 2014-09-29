@@ -37,12 +37,10 @@
   "dependencies": {
     "chalk": "*",
     "liftoff": "~0.9.5",
-    "minimist": "~0.0.8"
-  },
-  "preferGlobal": true,
-  "devDependencies": {
+    "minimist": "~0.0.8",
     "node-dir": "^0.1.6"
   },
+  "preferGlobal": true,
   "keywords": [
     "middleman",
     "sprockets",
