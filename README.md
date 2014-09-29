@@ -14,7 +14,7 @@ npm install -g lingon-cli
 
 ```bash
 # Initialize a new lingon project
-lingon new my-app
+lingon new my-project
 
 # start the lingon server
 cd my-project
