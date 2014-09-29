@@ -79,7 +79,7 @@ if (argv._[0] == 'new') {
         npmInstall.on('exit', function(code) {
 
           console.log(chalk.green('  run ') + 'bower install');
-          var npmInstall = spawn('bower', ['install'], { stdio: 'inherit', cwd: projectPath });
+          var npmInstall = spawn('node_modules/bower/bin/bower', ['install'], { stdio: 'inherit', cwd: projectPath });
           npmInstall.on('exit', function(code) {
 
             log(chalk.green('All done!'));
