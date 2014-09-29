@@ -6,9 +6,28 @@ The command line interface to [lingon](http://github.com/jpettersson/lingon), a 
 
 Install the lingon cli globally:
 
-``
+```bash
 npm install -g lingon-cli
-``
+```
+
+# Quickstart
+
+```bash
+# Initialize a new lingon project
+lingon new my-app
+
+# start the lingon server
+cd my-project
+lingon
+
+# Output: 
+# [ Lingon ] Working directory: /Path/to/project/my-project
+# [ Lingon ] http server listening on: 0.0.0.0:5678
+```
+
+The app is now accessible on `0.0.0.0:5678`.
+
+Read more about [lingon here](https://github.com/jpettersson/lingon).
 
 # Usage
 
