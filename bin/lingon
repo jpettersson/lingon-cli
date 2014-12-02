@@ -4,6 +4,7 @@
 
 var fs      = require('fs');
 var spawn   = require('child_process').spawn;
+var fork    = require('child_process').fork;
 var chalk   = require('chalk');
 var Liftoff = require('liftoff');
 var argv    = require('minimist')(process.argv.slice(2));
@@ -133,7 +134,7 @@ cli.launch(function handleArguments(env) {
       lingonProcess = null;
     }
 
-    lingonProcess = spawn(env.configPath, process.argv.slice(2), { stdio: 'inherit' });
+    lingonProcess = fork(env.configPath, process.argv.slice(2));
     lingonProcess.on('exit', function() {
       process.exit();
     })
