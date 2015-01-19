@@ -105,7 +105,12 @@ var cli = new Liftoff({
   configName: 'lingon'
 });
 
-cli.launch(function handleArguments(env) {
+cli.launch({
+  cwd: argv.cwd,
+  configPath: argv.myappfile,
+  require: argv.require,
+  completion: argv.completion
+}, function handleArguments(env) {
   var argv = env.argv;
 
   if (!env.configPath) {

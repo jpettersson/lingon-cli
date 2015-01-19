@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "chalk": "*",
-    "liftoff": "~0.9.5",
-    "minimist": "~0.0.8",
+    "liftoff": "~2.0.0",
+    "minimist": "~1.1.0",
     "node-dir": "^0.1.6"
   },
   "preferGlobal": true,
