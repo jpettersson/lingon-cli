@@ -35,7 +35,7 @@
     "lingon": "bin/lingon"
   },
   "dependencies": {
-    "chalk": "*",
+    "chalk": "~1.0.0",
     "liftoff": "~2.0.0",
     "minimist": "~1.1.0",
     "node-dir": "^0.1.6"
