@@ -53,9 +53,10 @@ if (argv._[0] == 'new') {
   }
 
   if (fs.existsSync(projectPath)) {
-    console.log(chalk.red('A folder with the name \'' + projectName + '\' already exists! Please choose a different name.'));
-    process.exit()
-  };
+    console.log(chalk.red('A folder with the name \'' + projectName +
+        '\' already exists! Please choose a different name.'));
+    process.exit(1);
+  }
 
   log('Initializing lingon project...');
 
@@ -140,9 +141,9 @@ cli.launch({
     }
 
     lingonProcess = fork(env.configPath, process.argv.slice(2));
-    lingonProcess.on('exit', function() {
-      process.exit();
-    })
+    lingonProcess.on('exit', function(code) {
+      process.exit(code);
+    });
   };
 
   // setting up a file watcher to reload the lingon process when the
